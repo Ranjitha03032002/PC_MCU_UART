@@ -1,0 +1,12 @@
+{
+    "idf.adapterTargetName": "esp32c3",
+    "idf.flashType": "UART",
+    "idf.portWin": "COM13",
+    "files.associations": {
+        "e_bikeblemain.h": "c",
+        "eeprom_conf.h": "c",
+        "ota_mngr.h": "c",
+        "eeprom_hal.h": "c",
+        "uart_hal.h": "c"
+    }
+}

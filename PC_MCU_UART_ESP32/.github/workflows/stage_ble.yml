@@ -1,0 +1,65 @@
+name: E-Bike BLE Firmware Build & Upload
+
+on:
+  push:
+    branches:
+      - workflow/ble
+      - BLE_REL_BUILD_INTERNAL
+
+env:
+  LOCAL_BIN_DIR: ${{ github.workspace }}/BLEbuild
+  PREFIXES: "E1LE , EM , EMP , EMA , E1 , E2 , E3 , E4, EMF032 , EMM042 , EMMM043 , E1D , E1N , DY , S2"
+
+jobs:
+  build-and-upload:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Determine Version
+        id: version
+        run: |
+          COMMIT_MSG=$(git log -1 --pretty=%B)
+          echo "$COMMIT_MSG"
+          echo "Processed"
+          if [[ $COMMIT_MSG =~ BLE\ FW\ version\ :\ ([0-9]+\.[0-9]+\.[0-9]+) ]]; then
+            VERSION="${BASH_REMATCH[1]}"
+            echo "VERSION=$VERSION" >> $GITHUB_ENV
+            VERSION_PARTS=(${VERSION//./ })
+            FORMATTED_VERSION=$(printf "%02s%02s%02s" "${VERSION_PARTS[0]}" "${VERSION_PARTS[1]}" "${VERSION_PARTS[2]}")
+            echo "FORMATTED_VERSION=$FORMATTED_VERSION" >> $GITHUB_ENV
+          else
+            exit 1
+          fi
+
+      - name: Prepare Build Directory
+        run: mkdir -p ${{ env.LOCAL_BIN_DIR }}
+
+      - name: Fetch .bin Files
+        run: |
+          BIN_FILES=("ESP-PR.bin" "bootloader.bin" "ota_data_initial.bin" "partition-table.bin")
+          for bin_file in "${BIN_FILES[@]}"; do
+            file_path=$(find . -type f -name "${bin_file}")
+            if [[ -n "$file_path" ]]; then
+              cp "$file_path" "${{ env.LOCAL_BIN_DIR }}/"
+            fi
+          done
+          echo "done"
+
+      - name: Zip and Upload Firmware
+        run: |
+          IFS=', ' read -r -a PREFIX_ARRAY <<< "${{ env.PREFIXES }}"
+          for prefix in "${PREFIX_ARRAY[@]}"; do
+            zip_file="${{ env.LOCAL_BIN_DIR }}/${prefix}BLE${{ env.FORMATTED_VERSION }}.zip"
+            zip -j "$zip_file" ${{ env.LOCAL_BIN_DIR }}/*.bin
+            echo "$zip_file"
+            curl --location 'https://backend-stage.emotorad.com/ota/v1/' \
+              --header 'Authorization: Bearer frontend' \
+              --form "firmware=@$zip_file" \
+              --form "ble_version=${{ env.VERSION }}" \
+              --form 'mcu_version=""' \
+              --form 'hardware_version="1"'
+              
+          done
