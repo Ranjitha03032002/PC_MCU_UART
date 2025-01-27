@@ -1,7 +1,7 @@
 {
     "version":            "1",
     "project_name":       "ESP-PR",
-    "project_version":    "ccfc93a",
+    "project_version":    "1fddb11-dirty",
     "project_path":       "C:/PC_MCU_UART/PC_MCU_UART_ESP32",
     "idf_path":           "C:/Users/hp/esp/v5.1.1/esp-idf",
     "build_dir":          "C:/PC_MCU_UART/PC_MCU_UART_ESP32/build",
@@ -790,7 +790,7 @@
             "managed_reqs": [],
             "managed_priv_reqs": [],
             "file": "C:/PC_MCU_UART/PC_MCU_UART_ESP32/build/esp-idf/main/libmain.a",
-            "sources": [ "C:/PC_MCU_UART/PC_MCU_UART_ESP32/main/main.c", "C:/PC_MCU_UART/PC_MCU_UART_ESP32/main/EEPROM/eeprom_conf.c", "C:/PC_MCU_UART/PC_MCU_UART_ESP32/main/EEPROM/eeprom_hal.c", "C:/PC_MCU_UART/PC_MCU_UART_ESP32/main/EEPROM/eeprom_mngr.c", "C:/PC_MCU_UART/PC_MCU_UART_ESP32/main/TIMER/timer_conf.c", "C:/PC_MCU_UART/PC_MCU_UART_ESP32/main/TIMER/timer_hal.c", "C:/PC_MCU_UART/PC_MCU_UART_ESP32/main/TIMER/timer_mngr.c", "C:/PC_MCU_UART/PC_MCU_UART_ESP32/main/UART/uart_conf.c", "C:/PC_MCU_UART/PC_MCU_UART_ESP32/main/UART/uart_hal.c", "C:/PC_MCU_UART/PC_MCU_UART_ESP32/main/UART/uart_mngr.c" ],
+            "sources": [ "C:/PC_MCU_UART/PC_MCU_UART_ESP32/main/main.c", "C:/PC_MCU_UART/PC_MCU_UART_ESP32/main/EEPROM/eeprom.c", "C:/PC_MCU_UART/PC_MCU_UART_ESP32/main/TIMER/timer.c", "C:/PC_MCU_UART/PC_MCU_UART_ESP32/main/UART/uart.c" ],
             "include_dirs": [ ".", "./EEPROM", "./TIMER", "./UART" ]
         },
         "mbedtls": {
